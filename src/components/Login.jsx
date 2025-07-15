@@ -9,7 +9,7 @@ const Login = () => {
   async function handleLogin(event) {
     event.preventDefault();
     try {
-      const request = await axios.post("/api/auth/login", {userName,password,});
+      const request = await axios.post("https://ems-backend-eodh.onrender.com/api/auth/login", {userName,password,});
       const token = request.data;
       localStorage.setItem("token",token);
       console.log(token);
