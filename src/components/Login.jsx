@@ -1,19 +1,31 @@
 import { useState } from "react";
 import axios from "axios";
-import "./Login.css";
+import { useNavigate } from "react-router-dom";
+import "bootstrap/dist/css/bootstrap.min.css";
 
-const Login = () => {
+const Login = ({ onLoginSuccess = () => {} }) => {
   const [userName, setUserName] = useState("");
   const [password, setPassword] = useState("");
+  const navigate = useNavigate();
 
   async function handleLogin(event) {
     event.preventDefault();
     try {
-      const request = await axios.post("https://ems-backend-eodh.onrender.com/api/auth/login", {userName,password,});
-      const token = request.data;
-      localStorage.setItem("token",token);
-      console.log(token);
+      const response = await axios.post("http://localhost:10000/api/auth/login", {
+        userName,
+        password,
+      });
+
+      const { token, userName: name, roles } = response.data;
+
+      localStorage.setItem("token", token);
+      localStorage.setItem("userName", name);
+      localStorage.setItem("roles", JSON.stringify(roles));
+
       alert("Login Successful");
+
+      onLoginSuccess(); // ✅ safe even if not passed
+      navigate("/");    // ✅ navigate to home
     } catch (e) {
       console.log("Login Error", e);
       alert("Invalid Credentials");
@@ -21,29 +33,48 @@ const Login = () => {
   }
 
   return (
-    <div className="login-container">
-      <h2 className="form-heading">Login</h2>
-      <form className="login-form" onSubmit={handleLogin}>
-        <label htmlFor="userName">User Name</label>
-        <input
-          id="userName"
-          name="userName"
-          value={userName}
-          type="text"
-          onChange={(e) => setUserName(e.target.value)}
-          required
-        />
-        <label htmlFor="password">Password</label>
-        <input
-          id="password"
-          name="password"
-          value={password}
-          type="password"
-          onChange={(e) => setPassword(e.target.value)}
-          required
-        />
-        <button type="submit">Login</button>
-      </form>
+    <div
+      className="d-flex justify-content-center align-items-center vh-100"
+      style={{
+        background: "linear-gradient(90deg, #74c0fc, #b197fc)",
+      }}
+    >
+      <div className="bg-white p-4 rounded shadow" style={{ width: "350px" }}>
+        <h2 className="text-center text-danger mb-4">Login</h2>
+        <form onSubmit={handleLogin}>
+          <div className="mb-3">
+            <label htmlFor="userName" className="form-label">User Name</label>
+            <input
+              id="userName"
+              name="userName"
+              type="text"
+              className="form-control"
+              value={userName}
+              onChange={(e) => setUserName(e.target.value)}
+              required
+            />
+          </div>
+          <div className="mb-3">
+            <label htmlFor="password" className="form-label">Password</label>
+            <input
+              id="password"
+              name="password"
+              type="password"
+              className="form-control"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
+          </div>
+          <button
+            type="submit"
+            className="btn w-100 fw-bold text-white"
+            style={{ background: "linear-gradient(90deg, #74c0fc, #b197fc)" }}
+          >
+            Login
+          </button>
+        </form>
+      </div>
     </div>
   );
 };
