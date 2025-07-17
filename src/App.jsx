@@ -68,7 +68,7 @@ function App() {
 
       {/* Register Modal */}
       <Modal isOpen={modalType === "register"} onClose={closeModal}>
-        <Register />
+        <Register onOpenLogin={openLogin} />
         <p className="toggle-text text-center mt-3">
           Already have an account?{" "}
           <span

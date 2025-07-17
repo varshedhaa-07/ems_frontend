@@ -1,6 +1,7 @@
 import { useState } from "react";
 import axios from "axios";
 import "bootstrap/dist/css/bootstrap.min.css";
+import { useNavigate } from "react-router-dom";
 
 const AddEmployee = () => {
   const [form, setForm] = useState({
@@ -11,26 +12,32 @@ const AddEmployee = () => {
     roleNames: [],
   });
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    if (name === "roleNames") {
-      const selected = Array.from(e.target.selectedOptions, (option) => option.value);
-      setForm({ ...form, [name]: selected });
+  const navigate=useNavigate();
+   const handleChange = (e) => {
+  const { name, value } = e.target;
+
+  if (name === "roleNames") {
+    if (value === "Both") {
+      setForm({ ...form, [name]: ["USER", "ADMIN"] });
     } else {
-      setForm({ ...form, [name]: value });
+      setForm({ ...form, [name]: [value.toUpperCase()] });
     }
-  };
+  } else {
+    setForm({ ...form, [name]: value });
+  }
+};
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       const token = localStorage.getItem("token");
-      await axios.post("http://localhost:10000/employee", form,{
+      await axios.post("https://ems-backend-eodh.onrender.com/employee", form,{
     headers: {
       Authorization: `Bearer ${token}`,
     },
   });
       alert("Employee Added Successfully!");
+      navigate("/get-employee");
     } catch (error) {
       console.error("Error Adding Employee", error);
       alert("Error while adding employee");
@@ -83,18 +90,48 @@ const AddEmployee = () => {
             required
           />
 
-          <label>Role</label>
-          <select
-            name="roleNames"
-            className="form-select mb-3"
-            value={form.roleNames[0] || ""}
-            onChange={(e) => setForm({ ...form, roleNames: [e.target.value] })}
-          >
-            <option value="">Select Role</option>
-            <option value="admin">Admin</option>
-            <option value="user">User</option>
-            <option value="both">Both</option>
-          </select>
+          <label>Roles</label>
+          <div className="form-check mb-2">
+            <input
+              className="form-check-input"
+              type="checkbox"
+              id="userRole"
+              name="roleNames"
+              value="USER"
+              checked={form.roleNames.includes("USER")}
+              onChange={(e) => {
+                const role = e.target.value;
+                const updatedRoles = e.target.checked
+                  ? [...form.roleNames, role]
+                  : form.roleNames.filter((r) => r !== role);
+                setForm({ ...form, roleNames: updatedRoles });
+              }}
+            />
+            <label className="form-check-label" htmlFor="userRole">
+              User
+            </label>
+          </div>
+
+          <div className="form-check mb-3">
+            <input
+              className="form-check-input"
+              type="checkbox"
+              id="adminRole"
+              name="roleNames"
+              value="ADMIN"
+              checked={form.roleNames.includes("ADMIN")}
+              onChange={(e) => {
+                const role = e.target.value;
+                const updatedRoles = e.target.checked
+                  ? [...form.roleNames, role]
+                  : form.roleNames.filter((r) => r !== role);
+                setForm({ ...form, roleNames: updatedRoles });
+              }}
+            />
+            <label className="form-check-label" htmlFor="adminRole">
+              Admin
+            </label>
+          </div>
 
           <button
             type="submit"

@@ -18,7 +18,7 @@ const AddTask = () => {
       const token = localStorage.getItem("token");
 
       const response = await axios.post(
-        `http://localhost:10000/task/id/${empId}`,
+        `https://ems-backend-eodh.onrender.com/task/id/${empId}`,
         { title },
         {
           headers: {

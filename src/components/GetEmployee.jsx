@@ -7,31 +7,61 @@ const GetEmployee = () => {
   const [employees, setEmployees] = useState([]);
   const [roles, setRoles] = useState([]);
   const [selectedEmployee, setSelectedEmployee] = useState(null);
+  const [searchName, setSearchName] = useState("");
 
   const isAdmin =
     roles.includes("admin") || roles.includes("ADMIN") || roles.includes("both");
 
-  useEffect(() => {
-    const fetchEmployees = async () => {
-      try {
-        const token = localStorage.getItem("token");
-        const rolesFromStorage = JSON.parse(localStorage.getItem("roles") || "[]");
-        setRoles(rolesFromStorage);
+  const fetchAllEmployees = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      const rolesFromStorage = JSON.parse(localStorage.getItem("roles") || "[]");
+      setRoles(rolesFromStorage);
 
-        const response = await axios.get("http://localhost:10000/employee", {
+      const response = await axios.get("https://ems-backend-eodh.onrender.com/employee", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      setEmployees(response.data);
+    } catch (error) {
+      console.error("Error fetching employees", error);
+      alert("Could not fetch employee list.");
+    }
+  };
+
+  useEffect(() => {
+    fetchAllEmployees();
+  }, []);
+
+  const handleSearch = async () => {
+    if (searchName.trim() === "") {
+      fetchAllEmployees();
+      return;
+    }
+
+    try {
+      const token = localStorage.getItem("token");
+      const response = await axios.get(
+        `https://ems-backend-eodh.onrender.com/employee/${searchName}`,
+        {
           headers: {
             Authorization: `Bearer ${token}`,
           },
-        });
-        setEmployees(response.data);
-      } catch (error) {
-        console.error("Error fetching employees", error);
-        alert("Could not fetch employee list.");
-      }
-    };
+        }
+      );
 
-    fetchEmployees();
-  }, []);
+      const data = Array.isArray(response.data)
+        ? response.data
+        : [response.data];
+
+      setEmployees(data);
+    } catch (error) {
+      console.error("Search error", error);
+      alert("No matching employee found.");
+      setEmployees([]);
+    }
+  };
 
   const handleEdit = async (empId) => {
     const name = prompt("Enter updated name:");
@@ -43,7 +73,7 @@ const GetEmployee = () => {
     try {
       const token = localStorage.getItem("token");
       await axios.put(
-        `http://localhost:10000/employee/${empId}`,
+        `https://ems-backend-eodh.onrender.com/employee/${empId}`,
         { name, email },
         {
           headers: {
@@ -71,7 +101,7 @@ const GetEmployee = () => {
 
     try {
       const token = localStorage.getItem("token");
-      await axios.delete(`http://localhost:10000/employee/${empId}`, {
+      await axios.delete(`https://ems-backend-eodh.onrender.com/employee/${empId}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -87,12 +117,29 @@ const GetEmployee = () => {
 
   return (
     <div
-      className="d-flex flex-column justify-content-center align-items-center vh-100"
+      className="d-flex flex-column align-items-center"
       style={{
         background: "linear-gradient(90deg, #74c0fc, #b197fc)",
+        minHeight: "100vh",
         padding: "30px",
       }}
     >
+      {/* 🔍 Search Bar */}
+      <div className="w-75 mb-4">
+        <input
+          type="text"
+          className="form-control"
+          placeholder="Search employee by name"
+          value={searchName}
+          onChange={(e) => setSearchName(e.target.value)}
+          onKeyDown={(e) => e.key === "Enter" && handleSearch()}
+        />
+        <button className="btn btn-primary mt-2" onClick={handleSearch}>
+          Search
+        </button>
+      </div>
+
+      {/* 📋 Employee Table */}
       <div className="bg-white p-4 rounded shadow w-75">
         <h2 className="mb-4 text-center text-primary">Employee List</h2>
         <table className="table table-bordered table-striped">
@@ -143,7 +190,7 @@ const GetEmployee = () => {
         </table>
       </div>
 
-      {/* Modal to show Add/List Tasks */}
+      {/* 🧾 Modal to show Add/List Tasks */}
       {selectedEmployee && (
         <EmployeeTaskActions
           selectedEmployee={selectedEmployee}

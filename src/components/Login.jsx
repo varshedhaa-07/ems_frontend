@@ -11,7 +11,7 @@ const Login = ({ onLoginSuccess = () => {} }) => {
   async function handleLogin(event) {
     event.preventDefault();
     try {
-      const response = await axios.post("http://localhost:10000/api/auth/login", {
+      const response = await axios.post("https://ems-backend-eodh.onrender.com/api/auth/login", {
         userName,
         password,
       });
@@ -24,8 +24,8 @@ const Login = ({ onLoginSuccess = () => {} }) => {
 
       alert("Login Successful");
 
-      onLoginSuccess(); // ✅ safe even if not passed
-      navigate("/");    // ✅ navigate to home
+      onLoginSuccess(); 
+      navigate("/");    
     } catch (e) {
       console.log("Login Error", e);
       alert("Invalid Credentials");

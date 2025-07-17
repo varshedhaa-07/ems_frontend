@@ -28,8 +28,8 @@ const Navbar = ({ isLoggedIn, roles, setIsLoggedIn, onLoginClick }) => {
     <nav className="navbar navbar-expand-lg navbar-light bg-white shadow-sm px-4 py-3">
       <div className="container-fluid">
         <Link to="/" className="navbar-brand fw-bold text-primary">
-  EMS
-</Link>
+           EMS
+        </Link>
 
 
         <div className="d-flex gap-2">
