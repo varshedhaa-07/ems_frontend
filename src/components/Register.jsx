@@ -31,7 +31,7 @@ const Register = ({ onOpenLogin }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post(`${process.env.URL}/api/auth/register`, form);
+      await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/auth/register`, form);
       alert("Registered Successfully!");
       onOpenLogin();
     } catch (error) {

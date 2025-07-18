@@ -11,7 +11,7 @@ const Login = ({ onLoginSuccess = () => {} }) => {
   async function handleLogin(event) {
     event.preventDefault();
     try {
-      const response = await axios.post(`${process.env.URL}/api/auth/login`, {
+      const response = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/auth/login`, {
         userName,
         password,
       });

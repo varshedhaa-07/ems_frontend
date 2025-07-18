@@ -18,7 +18,7 @@ const AddTask = () => {
       const token = localStorage.getItem("token");
 
       const response = await axios.post(
-        `${process.env.URL}/task/id/${empId}`,
+        `${import.meta.env.VITE_BACKEND_URL}/task/id/${empId}`,
         { title },
         {
           headers: {

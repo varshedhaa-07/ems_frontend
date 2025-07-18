@@ -15,7 +15,7 @@ const TaskList = () => {
         setUserName(user);
 
         const response = await axios.get(
-          `${process.env.URL}/task/id/${empId}/tasks`,
+          `${import.meta.env.VITE_BACKEND_URL}/task/id/${empId}/tasks`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -39,7 +39,7 @@ const TaskList = () => {
       console.log("Updating status for task ID:", taskId);
 
       await axios.put(
-        `${process.env.URL}/task/status`,
+        `${import.meta.env.VITE_BACKEND_URL}/task/status`,
         {
           taskId: taskId,
           status: newStatus,
