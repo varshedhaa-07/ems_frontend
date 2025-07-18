@@ -18,7 +18,7 @@ const GetEmployee = () => {
       const rolesFromStorage = JSON.parse(localStorage.getItem("roles") || "[]");
       setRoles(rolesFromStorage);
 
-      const response = await axios.get("${process.env.URL}/employee", {
+      const response = await axios.get(`${process.env.URL}/employee`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },

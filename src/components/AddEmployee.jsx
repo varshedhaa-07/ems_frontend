@@ -31,7 +31,7 @@ const AddEmployee = () => {
     e.preventDefault();
     try {
       const token = localStorage.getItem("token");
-      await axios.post("${process.env.URL}/employee", form,{
+      await axios.post(`${process.env.URL}/employee`, form,{
     headers: {
       Authorization: `Bearer ${token}`,
     },

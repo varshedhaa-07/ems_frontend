@@ -39,7 +39,7 @@ const TaskList = () => {
       console.log("Updating status for task ID:", taskId);
 
       await axios.put(
-        "${process.env.URL}/task/status",
+        `${process.env.URL}/task/status`,
         {
           taskId: taskId,
           status: newStatus,
