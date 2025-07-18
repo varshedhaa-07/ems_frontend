@@ -10,7 +10,7 @@ const Navbar = ({ isLoggedIn, roles, setIsLoggedIn, onLoginClick }) => {
   const handleLogout = () => {
     localStorage.clear();
     setIsLoggedIn(false);
-    window.location.href = "/"; // Redirect to home
+    window.location.href = "/";
   };
 
   const navigate = useNavigate();

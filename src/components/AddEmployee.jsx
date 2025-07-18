@@ -31,7 +31,7 @@ const AddEmployee = () => {
     e.preventDefault();
     try {
       const token = localStorage.getItem("token");
-      await axios.post("https://ems-backend-eodh.onrender.com/employee", form,{
+      await axios.post("${process.env.URL}/employee", form,{
     headers: {
       Authorization: `Bearer ${token}`,
     },

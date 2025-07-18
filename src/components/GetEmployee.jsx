@@ -18,7 +18,7 @@ const GetEmployee = () => {
       const rolesFromStorage = JSON.parse(localStorage.getItem("roles") || "[]");
       setRoles(rolesFromStorage);
 
-      const response = await axios.get("https://ems-backend-eodh.onrender.com/employee", {
+      const response = await axios.get("${process.env.URL}/employee", {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -43,7 +43,7 @@ const GetEmployee = () => {
     try {
       const token = localStorage.getItem("token");
       const response = await axios.get(
-        `https://ems-backend-eodh.onrender.com/employee/${searchName}`,
+        `${process.env.URL}/employee/${searchName}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -73,7 +73,7 @@ const GetEmployee = () => {
     try {
       const token = localStorage.getItem("token");
       await axios.put(
-        `https://ems-backend-eodh.onrender.com/employee/${empId}`,
+        `${process.env.URL}/employee/${empId}`,
         { name, email },
         {
           headers: {
@@ -101,7 +101,7 @@ const GetEmployee = () => {
 
     try {
       const token = localStorage.getItem("token");
-      await axios.delete(`https://ems-backend-eodh.onrender.com/employee/${empId}`, {
+      await axios.delete(`${process.env.URL}/employee/${empId}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },

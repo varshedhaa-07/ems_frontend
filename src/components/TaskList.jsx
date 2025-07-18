@@ -15,7 +15,7 @@ const TaskList = () => {
         setUserName(user);
 
         const response = await axios.get(
-          `https://ems-backend-eodh.onrender.com/task/id/${empId}/tasks`,
+          `${process.env.URL}/task/id/${empId}/tasks`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -39,7 +39,7 @@ const TaskList = () => {
       console.log("Updating status for task ID:", taskId);
 
       await axios.put(
-        "https://ems-backend-eodh.onrender.com/task/status",
+        "${process.env.URL}/task/status",
         {
           taskId: taskId,
           status: newStatus,
